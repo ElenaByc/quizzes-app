@@ -1,16 +1,24 @@
-
 const Quiz = require('../models/Quiz')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
+const getAllPublishedQuizzes = async (req, res) => {
+  const quizzes = await Quiz.find({ isPublished: true }).sort('-createdAt')
+  res.status(StatusCodes.OK).json({ quizzes, count: quizzes.length })
+}
 
-const getAllQuizzes = async (req, res) => {
-  const quizzes = await Quiz.find({ createdBy: req.user.userId }).sort('createdAt')
+const getQuizzesByCreator = async (req, res) => {
+  const quizzes = await Quiz.find({ createdBy: req.user.userId }).sort(
+    'createdAt',
+  )
   res.status(StatusCodes.OK).json({ quizzes, count: quizzes.length })
 }
 
 const getQuiz = async (req, res) => {
-  const { user: { userId }, params: { id: quizId } } = req
+  const {
+    user: { userId },
+    params: { id: quizId },
+  } = req
   const quiz = await Quiz.findOne({ _id: quizId, createdBy: userId })
   if (!quiz) {
     throw new NotFoundError(`No quiz found with ID: ${quizId}`)
@@ -31,7 +39,7 @@ const updateQuiz = async (req, res) => {
   const {
     body: { title, subject },
     user: { userId },
-    params: { id: quizId }
+    params: { id: quizId },
   } = req
 
   if (!title || !subject) {
@@ -43,7 +51,7 @@ const updateQuiz = async (req, res) => {
   const quiz = await Quiz.findOneAndUpdate(
     { _id: quizId, createdBy: userId },
     req.body,
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
   if (!quiz) {
     throw new NotFoundError(`No quiz found with ID: ${quizId}`)
@@ -55,7 +63,7 @@ const updateQuiz = async (req, res) => {
 const deleteQuiz = async (req, res) => {
   const {
     user: { userId },
-    params: { id: quizId }
+    params: { id: quizId },
   } = req
 
   const quiz = await Quiz.findOneAndDelete({ _id: quizId, createdBy: userId })
@@ -67,7 +75,8 @@ const deleteQuiz = async (req, res) => {
 }
 
 module.exports = {
-  getAllQuizzes,
+  getAllPublishedQuizzes,
+  getQuizzesByCreator,
   getQuiz,
   createQuiz,
   updateQuiz,
