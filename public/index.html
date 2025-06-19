@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quizzes List</title>
+</head>
+
+<body>
+    <h1>Quizzes List</h1>
+    <hr />
+    <p id="message"></p>
+    <hr />
+    <div id="login-register" style="display:none;">
+        <h2>Welcome! Please log in or register.</h2>
+        <button type="button" id="login">login</button>
+        <button type="button" id="register">register</button>
+    </div>
+
+    <div id="login-div" style="display:none;">
+        <h2>Log In</h2>
+        <form id="login-form">
+            <div>
+                <label for="email">email:</label> <input type="email" id="email" />
+            </div>
+            <div>
+                <label for="password">password:</label> <input type="password" id="password" />
+            </div>
+            <button type="submit" id="login-button">login</button>
+            <button type="button" id="login-cancel">cancel</button>
+        </form>
+    </div>
+
+    <div id="register-div" style="display:none;">
+        <h2>Register</h2>
+        <form id="register-form">
+            <div>
+                <label for="name">name:</label> <input type="text" id="name" />
+            </div>
+            <div>
+                <label for="register-email">email:</label>
+                <input type="email" id="register-email" />
+            </div>
+            <div>
+                <label for="register-password">password:</label>
+                <input type="password" id="register-password" />
+            </div>
+            <div>
+                <label for="verify-password">verify password:</label>
+                <input type="password" id="verify-password" />
+            </div>
+            <button type="submit" id="register-button">register</button>
+            <button type="button" id="register-cancel">cancel</button>
+        </form>
+    </div>
+
+    <div id="quizzes" style="display:none;">
+        <h2>Quizzes</h2>
+        <p id="quizzes-message"></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Description</th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody id="quizzes-table-body">
+                <!-- Quiz data rows will go here -->
+            </tbody>
+        </table>
+
+        <button type="button" id="add-quiz">add quiz</button>
+        <button type="button" id="logout">log out</button>
+    </div>
+
+    <div id="edit-quiz" style="display:none;">
+        <h2>Edit Quiz</h2>
+        <form id="edit-quiz-form">
+            <div>
+                <label for="quiz-title">Title:</label>
+                <input type="text" id="quiz-title" />
+            </div>
+            <div>
+                <label for="quiz-description">Description:</label>
+                <input type="text" id="quiz-description" />
+            </div>
+            <div>
+                <label for="quiz-subject">Subject:</label>
+                <select id="quiz-subject">
+                    <option value="" disabled selected>--Select subject--</option>
+                    <option value="Math">Math</option>
+                    <option value="Science">Science</option>
+                    <option value="History">History</option>
+                    <option value="Literature">Literature</option>
+                    <option value="Geography">Geography</option>
+                </select>
+            </div>
+            <!--    TODO: Question and answer fields.
+                    This part is complex due to the nested structure of the quiz model.
+                    This functionality will be addressed later, potentially after 
+                    the quiz model has been reorganized. -->
+            <button type="submit" id="submit-quiz">Save</button>
+            <button type="button" id="cancel-edit-quiz">Cancel</button>
+        </form>
+    </div>
+
+    <script src="./index.js" type="module"></script>
+</body>
+
+</html>
