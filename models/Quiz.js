@@ -12,10 +12,20 @@ const QuizSchema = new mongoose.Schema(
       type: String,
       maxlength: 500,
     },
-    category: {
+    subject: {
       type: String,
-      enum: ['Math', 'Science', 'History', 'Literature', 'Geography', 'Other'],
-      required: [true, 'Please select a category for the quiz'],
+      enum: [
+        'Math',
+        'Astronomy',
+        'Physics',
+        'Chemistry',
+        'Biology',
+        'History',
+        'Literature',
+        'Geography',
+        'Other',
+      ],
+      required: [true, 'Please select a subject for the quiz'],
     },
     isPublished: {
       type: Boolean,

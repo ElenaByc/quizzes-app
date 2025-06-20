@@ -1,13 +1,14 @@
 const Quiz = require('../models/Quiz')
+const checkQuizAccess = require('../utils/checkQuizAccess')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
 const getAllPublishedQuizzes = async (req, res) => {
-  const quizzes = await Quiz.find({ isPublished: true }).sort('-createdAt')
+  const quizzes = await Quiz.find({ isPublished: true }).sort('createdAt')
   res.status(StatusCodes.OK).json({ quizzes, count: quizzes.length })
 }
 
-const getQuizzesByCreator = async (req, res) => {
+const getQuizzesCreatedByUser = async (req, res) => {
   const quizzes = await Quiz.find({ createdBy: req.user.userId }).sort(
     'createdAt',
   )
@@ -48,6 +49,9 @@ const updateQuiz = async (req, res) => {
 
   console.log('Updating quiz with ID:', quizId, 'by user:', userId)
   console.log('title:', title, 'subject:', subject)
+  // Check if the quiz exists and belongs to the user
+  await checkQuizAccess(quizId, userId, true)
+
   const quiz = await Quiz.findOneAndUpdate(
     { _id: quizId, createdBy: userId },
     req.body,
@@ -76,7 +80,7 @@ const deleteQuiz = async (req, res) => {
 
 module.exports = {
   getAllPublishedQuizzes,
-  getQuizzesByCreator,
+  getQuizzesCreatedByUser,
   getQuiz,
   createQuiz,
   updateQuiz,

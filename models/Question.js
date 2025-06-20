@@ -14,7 +14,7 @@ const QuestionSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ['single_choice', 'multiple_choice'],
-      required: true,
+      default: 'single_choice',
     },
   },
   { timestamps: true },

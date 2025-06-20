@@ -5,10 +5,11 @@ const { BadRequestError, NotFoundError } = require('../errors')
 
 // Create a new question for a quiz
 const createQuestion = async (req, res) => {
-  const { quizId, questionText, type } = req.body
+  const { quizId, questionText } = req.body
+  console.log('Creating question with data:', req.body)
 
-  if (!quizId || !questionText || !type) {
-    throw new BadRequestError('Quiz ID, question text, and type are required')
+  if (!quizId || !questionText) {
+    throw new BadRequestError('Quiz ID, and question text are required')
   }
 
   const question = await Question.create(req.body)
@@ -18,6 +19,7 @@ const createQuestion = async (req, res) => {
 // Get all questions for a specific quiz
 const getQuestionsByQuiz = async (req, res) => {
   const { quizId } = req.params
+
   // Check if the user has access to the quiz
   await checkQuizAccess(quizId, req.user.userId)
   const questions = await Question.find({ quizId })
@@ -26,36 +28,50 @@ const getQuestionsByQuiz = async (req, res) => {
 }
 
 // Update a specific question
-const Question = require('../models/Question')
-const checkQuizAccess = require('../utils/checkQuizAccess')
-
 const updateQuestion = async (req, res) => {
   const { id: questionId } = req.params
+
   const question = await Question.findById(questionId)
   if (!question) {
     throw new NotFoundError(`No question found with ID: ${questionId}`)
   }
 
-  await checkQuizAccess(question.quizId, req.user.userId, true) // enforce ownership
+  // Check if the user has editing access to the quiz associated with the question
+  await checkQuizAccess(question.quizId, req.user.userId, true)
 
-  const updated = await Question.findByIdAndUpdate(questionId, req.body, {
-    new: true,
-    runValidators: true,
-  })
+  const updatedQuestion = await Question.findByIdAndUpdate(
+    questionId,
+    req.body,
+    { new: true, runValidators: true },
+  )
 
-  res.status(StatusCodes.OK).json({ question: updated })
+  res.status(StatusCodes.OK).json({ question: updatedQuestion })
 }
 
 // Delete a specific question
 const deleteQuestion = async (req, res) => {
   const { id: questionId } = req.params
-  const question = await Question.findByIdAndDelete(questionId)
 
+  // Check if the question exists
+  const question = await Question.findById(questionId)
   if (!question) {
     throw new NotFoundError(`No question found with ID: ${questionId}`)
   }
 
-  await checkQuizAccess(question.quizId, req.user.userId, true) // enforce ownership
+  // Check if the user has editing access to the quiz associated with the question
+  await checkQuizAccess(question.quizId, req.user.userId, true)
+
+  // Get questions options
+  const options = await Option.find({ questionId })
+  if (options.length > 0) {
+    // throw new BadRequestError('Cannot delete question with existing options')
+
+    // Delete associated options
+    await Option.deleteMany({ questionId })
+  }
+
+  // Delete the question
+  await Question.findByIdAndDelete(questionId)
 
   res.status(StatusCodes.OK).json({ msg: 'Question deleted successfully' })
 }
