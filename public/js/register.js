@@ -5,10 +5,10 @@ import {
   setMessage,
   setActiveDiv,
   setToken,
+  setUserName,
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showQuizzes } from './quizzes.js'
-
 
 let registerDiv = null
 
@@ -66,9 +66,11 @@ export const handleRegister = () => {
 
           const data = await response.json() // Parse the JSON response from the server
 
-          if (response.status === 201) { // Check for successful creation
+          if (response.status === 201) {
+            // Check for successful creation
             setMessage(`Registration successful. Welcome ${data.user.name}`)
             setToken(data.token) // Store the received JWT token
+            setUserName(data.user.name)
 
             // Clear input field
             clearRegisterForm()
@@ -89,7 +91,7 @@ export const handleRegister = () => {
       } else if (e.target === registerCancelButton) {
         // When cancel button is clicked, return to login/register choice
         clearRegisterForm() // Clear the registration form fields
-        clearMessage()      // Clear any previous messages
+        clearMessage() // Clear any previous messages
         showLoginRegister()
       }
     }

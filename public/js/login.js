@@ -5,6 +5,7 @@ import {
   setMessage,
   enableInput,
   setToken,
+  setUserName,
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showQuizzes } from './quizzes.js'
@@ -53,9 +54,11 @@ export const handleLogin = () => {
 
           const data = await response.json() // Parse the JSON response
 
-          if (response.status === 200) { // Check for successful login (HTTP 200 OK)
+          if (response.status === 200) {
+            // Check for successful login (HTTP 200 OK)
             setMessage(`Login successful. Welcome ${data.user.name}`)
             setToken(data.token) // Save the received JWT token
+            setUserName(data.user.name)
 
             // Clear input fields
             clearLoginForm()
@@ -76,7 +79,7 @@ export const handleLogin = () => {
       } else if (e.target === loginCancelButton) {
         // When cancel button is clicked, return to login/register choice
         clearLoginForm() // Clear the login form fields
-        clearMessage()      // Clear any previous messages
+        clearMessage() // Clear any previous messages
         showLoginRegister()
       }
     }

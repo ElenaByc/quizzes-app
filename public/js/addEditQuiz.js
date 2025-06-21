@@ -4,7 +4,7 @@ import {
   clearMessage,
   setMessage,
   getToken,
-  setActiveDiv
+  setActiveDiv,
 } from './index.js'
 import { showQuizzes } from './quizzes.js'
 
@@ -14,7 +14,6 @@ let quizTitle = null
 let quizDescription = null
 let quizSubject = null
 let submitQuizButton = null
-
 
 export const handleAddEditQuiz = () => {
   addEditQuizDiv = document.getElementById('edit-quiz')
@@ -43,7 +42,10 @@ export const handleAddEditQuiz = () => {
         let successMessage = 'New quiz was created.' // Default success message
 
         // Check if we are updating an existing quiz based on the button text and stored ID
-        if (submitQuizButton.textContent === 'update quiz' && addEditQuizDiv.dataset.id) {
+        if (
+          submitQuizButton.textContent === 'update quiz' &&
+          addEditQuizDiv.dataset.id
+        ) {
           method = 'PATCH' // Change method to PATCH for updating
           url = `/api/v1/quizzes/${addEditQuizDiv.dataset.id}` // Add quiz ID to the URL
           successMessage = 'The quiz was updated.' // Change success message for update
@@ -56,7 +58,7 @@ export const handleAddEditQuiz = () => {
             method: method,
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Send the token
+              Authorization: `Bearer ${token}`, // Send the token
             },
             body: JSON.stringify({
               title: quizTitle.value,
@@ -74,7 +76,10 @@ export const handleAddEditQuiz = () => {
             clearAddEditQuizForm() // Clear the form fields
             showQuizzes() // Return to the quizzes list to see the updated/new entry
           } else {
-            setMessage(data.msg || `Failed to ${method === 'POST' ? 'create' : 'update'} quiz.`)
+            setMessage(
+              data.msg ||
+                `Failed to ${method === 'POST' ? 'create' : 'update'} quiz.`,
+            )
           }
         } catch (err) {
           console.error(err) // Log network or other errors to console
@@ -91,7 +96,6 @@ export const handleAddEditQuiz = () => {
     }
   })
 }
-
 
 // Shows the add/edit quiz form. 'quizId' parameter for editing a specific quiz.
 export const showAddEditQuiz = async (quizId) => {
@@ -116,13 +120,14 @@ export const showAddEditQuiz = async (quizId) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Send the token
+          Authorization: `Bearer ${token}`, // Send the token
         },
       })
 
       const data = await response.json() // Parse the JSON response
 
-      if (response.status === 200) { // Check for successful response
+      if (response.status === 200) {
+        // Check for successful response
         // Populate form fields with existing quiz data
         quizTitle.value = data.quiz.title
         quizDescription.value = data.quiz.description || ''
@@ -146,7 +151,6 @@ export const showAddEditQuiz = async (quizId) => {
     }
   }
 }
-
 
 // Clears input fields and prepares the form for adding a new quiz
 export const clearAddEditQuizForm = () => {

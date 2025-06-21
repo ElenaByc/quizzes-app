@@ -10,6 +10,26 @@ export let inputEnabled = true
 let activeDiv = null
 // Variable for the element where messages will be displayed to the user
 let message = null
+// Variable to store the logged-in user's name
+let userName = null
+
+// Function to set and store the user's name
+export const setUserName = (value) => {
+  userName = value
+  const userGreeting = document.getElementById('user-greeting')
+  if (value) {
+    localStorage.setItem('userName', value)
+    userGreeting.textContent = `Welcome, ${userName}`
+  } else {
+    localStorage.removeItem('userName')
+    userGreeting.textContent = ''
+  }
+}
+
+// Function to retrieve the user's name
+export const getUserName = () => {
+  return userName
+}
 
 // Clear the message text
 export const clearMessage = () => {
@@ -64,10 +84,15 @@ export const getToken = () => {
   return token // Return the current token value
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
   token = localStorage.getItem('token')
+  userName = localStorage.getItem('userName')
   message = document.getElementById('message')
+
+  const headerLoginButton = document.getElementById('header-login-button')
+  const headerLogoutButton = document.getElementById('header-logout-button')
+  const mainNav = document.getElementById('main-nav')
+  const userGreeting = document.getElementById('user-greeting')
 
   handleLoginRegister()
   handleLogin()
@@ -75,10 +100,24 @@ document.addEventListener('DOMContentLoaded', () => {
   handleRegister()
   handleAddEditQuiz()
 
+  if (userName) {
+    userGreeting.textContent = `Welcome, ${userName}`
+  }
+
+  // Control header buttons based on token
+  if (token) {
+    headerLoginButton.style.display = 'none'
+    headerLogoutButton.style.display = 'inline-block'
+    mainNav.style.display = 'flex'
+  } else {
+    headerLoginButton.style.display = 'inline-block'
+    headerLogoutButton.style.display = 'none'
+    mainNav.style.display = 'none'
+  }
+
   if (token) {
     showQuizzes()
   } else {
     showLoginRegister()
   }
-
 })

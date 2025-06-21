@@ -7,6 +7,7 @@ import {
   getToken,
   setToken,
   setActiveDiv,
+  setUserName,
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showAddEditQuiz } from './addEditQuiz.js'
@@ -28,6 +29,7 @@ export const handleQuizzes = () => {
         showAddEditQuiz(null)
       } else if (e.target === logoutButton) {
         setToken(null) // Clear the token to log out
+        setUserName(null) // Clear the username
         setMessage('You have been logged out.') // Show logout message
         quizzesTableBody.innerHTML = '' // Clear the quizzes table body
         showLoginRegister()
@@ -46,13 +48,14 @@ export const handleQuizzes = () => {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Include the JWT token for authentication
+              Authorization: `Bearer ${token}`, // Include the JWT token for authentication
             },
           })
 
           const data = await response.json() // Parse the JSON response
 
-          if (response.status === 200) { // Check for successful deletion (server returns 200 OK with message)
+          if (response.status === 200) {
+            // Check for successful deletion (server returns 200 OK with message)
             setMessage(data.msg || 'The quiz entry was deleted.')
             showQuizzes() // Refresh the quiz list to show the updated state
           } else {
@@ -83,13 +86,14 @@ export const showQuizzes = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, // Include the JWT token for authentication
+        Authorization: `Bearer ${token}`, // Include the JWT token for authentication
       },
     })
 
     const data = await response.json() // Parse the JSON response
 
-    if (response.status === 200) { // Check for successful response
+    if (response.status === 200) {
+      // Check for successful response
       // Clear previous quizzes from the table
       quizzesTableBody.innerHTML = ''
 
@@ -137,4 +141,3 @@ export const showQuizzes = async () => {
     enableInput(true) // Re-enable input regardless of success or failure
   }
 }
-
