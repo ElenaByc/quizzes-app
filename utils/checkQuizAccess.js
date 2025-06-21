@@ -1,7 +1,7 @@
 const Quiz = require('../models/Quiz')
 const { NotFoundError, UnauthenticatedError } = require('../errors')
 
-const checkQuizAccess = async (quizId, userId, forEdit = false) => {
+const checkQuizAccess = async (quizId, userId, edit = false) => {
   const quiz = await Quiz.findById(quizId)
   if (!quiz) {
     throw new NotFoundError(`No quiz found with ID: ${quizId}`)
@@ -9,7 +9,7 @@ const checkQuizAccess = async (quizId, userId, forEdit = false) => {
 
   const isCreator = quiz.createdBy.toString() === userId
 
-  if (forEdit && !isCreator) {
+  if (edit && !isCreator) {
     throw new UnauthenticatedError('You are not allowed to edit this quiz')
   }
 

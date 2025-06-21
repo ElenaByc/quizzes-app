@@ -1,15 +1,22 @@
 const Question = require('../models/Question')
+const Option = require('../models/Option')
 const checkQuizAccess = require('../utils/checkQuizAccess')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
+const allowedTypes = ['single_choice', 'multiple_choice']
+
 // Create a new question for a quiz
 const createQuestion = async (req, res) => {
-  const { quizId, questionText } = req.body
+  const { quizId, questionText, type } = req.body
   console.log('Creating question with data:', req.body)
 
   if (!quizId || !questionText) {
     throw new BadRequestError('Quiz ID, and question text are required')
+  }
+
+  if (type && !allowedTypes.includes(type)) {
+    throw new BadRequestError(`Invalid question type: ${type}`)
   }
 
   const question = await Question.create(req.body)
@@ -30,10 +37,15 @@ const getQuestionsByQuiz = async (req, res) => {
 // Update a specific question
 const updateQuestion = async (req, res) => {
   const { id: questionId } = req.params
+  const { type } = req.body
 
   const question = await Question.findById(questionId)
   if (!question) {
     throw new NotFoundError(`No question found with ID: ${questionId}`)
+  }
+
+  if (type && !allowedTypes.includes(type)) {
+    throw new BadRequestError(`Invalid question type: ${type}`)
   }
 
   // Check if the user has editing access to the quiz associated with the question
@@ -64,8 +76,6 @@ const deleteQuestion = async (req, res) => {
   // Get questions options
   const options = await Option.find({ questionId })
   if (options.length > 0) {
-    // throw new BadRequestError('Cannot delete question with existing options')
-
     // Delete associated options
     await Option.deleteMany({ questionId })
   }

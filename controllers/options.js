@@ -7,6 +7,7 @@ const { BadRequestError, NotFoundError } = require('../errors')
 
 // Create a new option for a question
 const createOption = async (req, res) => {
+  console.log('Creating option:', req.body)
   const { questionId, optionText } = req.body
 
   if (!questionId || !optionText) {
