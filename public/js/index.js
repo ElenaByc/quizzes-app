@@ -17,12 +17,23 @@ let userName = null
 export const setUserName = (value) => {
   userName = value
   const userGreeting = document.getElementById('user-greeting')
+  const headerLoginRegisterDiv = document.getElementById(
+    'header-login-register',
+  )
+  const headerLogoutButton = document.getElementById('header-logout-button')
+  const mainNav = document.getElementById('main-nav')
   if (value) {
     localStorage.setItem('userName', value)
     userGreeting.textContent = `Welcome, ${userName}`
+    headerLoginRegisterDiv.classList.add('d-none')
+    headerLogoutButton.classList.remove('d-none')
+    mainNav.classList.remove('d-none')
   } else {
     localStorage.removeItem('userName')
     userGreeting.textContent = ''
+    headerLoginRegisterDiv.classList.remove('d-none')
+    headerLogoutButton.classList.add('d-none')
+    mainNav.classList.add('d-none')
   }
 }
 
@@ -35,13 +46,15 @@ export const getUserName = () => {
 export const clearMessage = () => {
   if (message) {
     message.textContent = ''
+    message.classList.add('d-none') // Hide the message element
   }
 }
 
 // Set the message text
 export const setMessage = (text) => {
-  if (message) {
+  if (message && text.trim() !== '') {
     message.textContent = text
+    message.classList.remove('d-none') // Show the message element
   }
 }
 
@@ -54,11 +67,14 @@ export const setActiveDiv = (newDiv) => {
   if (newDiv === activeDiv) {
     return
   }
+
   if (activeDiv) {
-    activeDiv.style.display = 'none' // Hide the previously active div
+    activeDiv.classList.add('d-none') // Hide the previous section
   }
-  newDiv.style.display = 'block' // Show the new div
-  activeDiv = newDiv // Update the active div reference
+
+  newDiv.classList.remove('d-none') // Show the new section
+
+  activeDiv = newDiv
 }
 
 // Function to enable/disable user input
@@ -89,15 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
   userName = localStorage.getItem('userName')
   message = document.getElementById('message')
 
-  const headerLoginButton = document.getElementById('header-login-button')
+  const headerLoginRegisterDiv = document.getElementById(
+    'header-login-register',
+  )
   const headerLogoutButton = document.getElementById('header-logout-button')
   const mainNav = document.getElementById('main-nav')
   const userGreeting = document.getElementById('user-greeting')
 
   handleLoginRegister()
   handleLogin()
-  handleQuizzes()
   handleRegister()
+  handleQuizzes()
   handleAddEditQuiz()
 
   if (userName) {
@@ -106,14 +124,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Control header buttons based on token
   if (token) {
-    headerLoginButton.style.display = 'none'
-    headerLogoutButton.style.display = 'inline-block'
-    mainNav.style.display = 'flex'
+    headerLoginRegisterDiv.classList.add('d-none')
+    headerLogoutButton.classList.remove('d-none')
+    mainNav.classList.remove('d-none')
   } else {
-    headerLoginButton.style.display = 'inline-block'
-    headerLogoutButton.style.display = 'none'
-    mainNav.style.display = 'none'
+    headerLoginRegisterDiv.classList.remove('d-none')
+    headerLogoutButton.classList.add('d-none')
+    mainNav.classList.add('d-none')
   }
+
+  // Log out
+  headerLogoutButton.addEventListener('click', () => {
+    setToken(null)
+    setUserName(null)
+    headerLoginRegisterDiv.classList.remove('d-none')
+    headerLogoutButton.classList.add('d-none')
+    mainNav.classList.add('d-none')
+    setMessage('You have been logged out.')
+    userGreeting.textContent = ''
+    // Clear the quizzes table body
+    const quizzesTableBody = document.getElementById('quizzes-table-body')
+    if (quizzesTableBody) {
+      quizzesTableBody.innerHTML = ''
+    }
+    showLoginRegister()
+  })
 
   if (token) {
     showQuizzes()
