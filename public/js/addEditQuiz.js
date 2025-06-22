@@ -6,7 +6,7 @@ import {
   getToken,
   setActiveDiv,
 } from './index.js'
-import { showQuizzes } from './quizzes.js'
+import { showQuizManagement } from './quizzes.js'
 
 let addEditQuizDiv = null
 let addEditQuizForm = null
@@ -74,7 +74,7 @@ export const handleAddEditQuiz = () => {
           if (response.status === 201 || response.status === 200) {
             setMessage(successMessage) // Use the determined success message
             clearAddEditQuizForm() // Clear the form fields
-            showQuizzes() // Return to the quizzes list to see the updated/new entry
+            showQuizManagement() // Return to the quizzes list to see the updated/new entry
           } else {
             setMessage(
               data.msg ||
@@ -91,7 +91,7 @@ export const handleAddEditQuiz = () => {
         // When cancel button is clicked, return to quizzes list
         clearAddEditQuizForm() // Clear the form fields
         setMessage('Quiz adding/editing cancelled.') // Show cancellation message
-        showQuizzes()
+        showQuizManagement() // Return to the quizzes list
       }
     }
   })
@@ -139,13 +139,13 @@ export const showAddEditQuiz = async (quizId) => {
       } else {
         // Handle cases where the quiz is not found (e.g., if it was deleted)
         setMessage(data.msg || 'The quiz entry was not found.')
-        showQuizzes() // Return to the quizzes list
+        showQuizManagement() // Return to the quizzes list
       }
     } catch (err) {
       // Catch and log network errors
       console.error(err)
       setMessage('A communication error occurred while fetching quiz for edit.')
-      showQuizzes() // Return to the quizzes list
+      showQuizManagement() // Return to the quizzes list
     } finally {
       enableInput(true) // Re-enable input regardless of success or failure
     }

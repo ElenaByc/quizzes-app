@@ -8,7 +8,7 @@ import {
   setUserName,
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
-import { showQuizzes } from './quizzes.js'
+import { showWelcomeScreen } from './exploreManage.js'
 
 let registerDiv = null
 
@@ -76,8 +76,7 @@ export const handleRegister = () => {
             clearRegisterForm()
 
             // Show welcome screen
-            const welcomeDiv = document.getElementById('welcome-screen')
-            setActiveDiv(welcomeDiv)
+            showWelcomeScreen()
           } else {
             // If the request is not successful, display the error message from the backend
             setMessage(data.msg)

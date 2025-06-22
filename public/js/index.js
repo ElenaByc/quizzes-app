@@ -1,8 +1,9 @@
-import { showQuizzes, handleQuizzes } from './quizzes.js'
 import { showLoginRegister, handleLoginRegister } from './loginRegister.js'
 import { handleLogin } from './login.js'
-import { handleAddEditQuiz } from './addEditQuiz.js'
 import { handleRegister } from './register.js'
+import { showWelcomeScreen, handleExploreManage } from './exploreManage.js'
+import { handleQuizzes } from './quizzes.js'
+import { handleAddEditQuiz } from './addEditQuiz.js'
 
 // Flag indicating if user input is enabled (e.g., during an API request)
 export let inputEnabled = true
@@ -115,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   handleLoginRegister()
   handleLogin()
   handleRegister()
+  handleExploreManage()
   handleQuizzes()
   handleAddEditQuiz()
 
@@ -152,9 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   if (token) {
-    // Show welcome screen
-    const welcomeDiv = document.getElementById('welcome-screen')
-    setActiveDiv(welcomeDiv)
+    showWelcomeScreen()
   } else {
     showLoginRegister()
   }
