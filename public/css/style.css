@@ -2,7 +2,8 @@
     width: fit-content;
 }
 
-#login-form {
+#login-form,
+#register-form {
     width: 400px;
 }
 

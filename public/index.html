@@ -111,14 +111,14 @@
           <button
             type="button"
             id="login"
-            class="btn btn-outline-primary btn-lg"
+            class="btn btn-outline-secondary btn-lg"
           >
             Log in
           </button>
           <button
             type="button"
             id="register"
-            class="btn btn-outline-primary btn-lg"
+            class="btn btn-outline-secondary btn-lg"
           >
             Register
           </button>
@@ -168,7 +168,7 @@
             <button
               type="submit"
               id="login-button"
-              class="btn btn-outline-primary btn-lg"
+              class="btn btn-outline-secondary btn-lg"
             >
               Log In
             </button>
@@ -183,26 +183,87 @@
         </form>
       </div>
 
-      <div id="register-div" class="container py-4 w-fit-content d-none">
-        <h2>Register</h2>
-        <form id="register-form">
-          <div>
-            <label for="name">name:</label> <input type="text" id="name" />
+      <div
+        id="register-div"
+        class="container d-none py-4 w-fit-content text-center"
+      >
+        <h2 class="mb-4">Register</h2>
+        <form
+          id="register-form"
+          class="d-flex flex-column gap-3 needs-validation"
+          novalidate
+          autocomplete="off"
+        >
+          <div class="form-floating">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Your Name"
+              required
+            />
+            <label for="name">Name</label>
+            <div class="invalid-feedback">Please enter your name</div>
           </div>
-          <div>
-            <label for="register-email">email:</label>
-            <input type="email" id="register-email" />
+
+          <div class="form-floating">
+            <input
+              type="email"
+              id="register-email"
+              name="email"
+              class="form-control"
+              placeholder="Email"
+              required
+            />
+            <label for="register-email">Email</label>
+            <div class="invalid-feedback">
+              Please enter a valid email address
+            </div>
           </div>
-          <div>
-            <label for="register-password">password:</label>
-            <input type="password" id="register-password" />
+
+          <div class="form-floating">
+            <input
+              type="password"
+              id="register-password"
+              name="password"
+              class="form-control"
+              placeholder="Password"
+              required
+            />
+            <label for="register-password">Password</label>
+            <div class="invalid-feedback">Please enter a password</div>
           </div>
-          <div>
-            <label for="verify-password">verify password:</label>
-            <input type="password" id="verify-password" />
+
+          <div class="form-floating">
+            <input
+              type="password"
+              id="verify-password"
+              name="verifyPassword"
+              class="form-control"
+              placeholder="Confirm Password"
+              required
+            />
+            <label for="verify-password">Confirm Password</label>
+            <div class="invalid-feedback">Please confirm your password</div>
           </div>
-          <button type="submit" id="register-button">register</button>
-          <button type="button" id="register-cancel">cancel</button>
+
+          <div class="d-flex justify-content-center gap-3 pt-3">
+            <button
+              type="submit"
+              id="register-button"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Register
+            </button>
+            <button
+              type="button"
+              id="register-cancel"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
 
@@ -236,7 +297,7 @@
               <button
                 type="button"
                 id="explore-button"
-                class="btn btn-outline-primary btn-lg mx-auto"
+                class="btn btn-outline-secondary btn-lg mx-auto"
               >
                 Take Quiz
               </button>
@@ -254,7 +315,7 @@
               <button
                 type="button"
                 id="manage-button"
-                class="btn btn-outline-primary btn-lg mx-auto"
+                class="btn btn-outline-secondary btn-lg mx-auto"
               >
                 Quiz Management
               </button>
