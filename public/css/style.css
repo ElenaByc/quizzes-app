@@ -1,3 +1,13 @@
 .w-fit-content {
     width: fit-content;
 }
+
+#login-form {
+    width: 400px;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-control {
+    font-size: 1.25rem;
+}
