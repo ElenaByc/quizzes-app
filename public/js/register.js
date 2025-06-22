@@ -75,8 +75,9 @@ export const handleRegister = () => {
             // Clear input field
             clearRegisterForm()
 
-            // Show the quizzes list
-            showQuizzes()
+            // Show welcome screen
+            const welcomeDiv = document.getElementById('welcome-screen')
+            setActiveDiv(welcomeDiv)
           } else {
             // If the request is not successful, display the error message from the backend
             setMessage(data.msg)

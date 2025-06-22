@@ -152,7 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   if (token) {
-    showQuizzes()
+    // Show welcome screen
+    const welcomeDiv = document.getElementById('welcome-screen')
+    setActiveDiv(welcomeDiv)
   } else {
     showLoginRegister()
   }

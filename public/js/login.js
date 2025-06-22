@@ -56,15 +56,16 @@ export const handleLogin = () => {
 
           if (response.status === 200) {
             // Check for successful login (HTTP 200 OK)
-            setMessage(`Login successful. Welcome ${data.user.name}`)
+            setMessage(`Login successful. Welcome ${data.user.name}!`)
             setToken(data.token) // Save the received JWT token
             setUserName(data.user.name)
 
             // Clear input fields
             clearLoginForm()
 
-            // Show the quizzes list
-            showQuizzes()
+            // Show welcome screen
+            const welcomeDiv = document.getElementById('welcome-screen')
+            setActiveDiv(welcomeDiv)
           } else {
             // If the request is not successful, display the error message from the backend
             setMessage(data.msg)
