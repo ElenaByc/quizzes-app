@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (quizzesTableBody) {
       quizzesTableBody.innerHTML = ''
     }
-    showLoginRegister()
+    const loggedOutDiv = document.getElementById('logged-out')
+    setActiveDiv(loggedOutDiv)
   })
 
   if (token) {
