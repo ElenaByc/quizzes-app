@@ -1,4 +1,4 @@
-import { inputEnabled, setActiveDiv } from './index.js'
+import { clearMessage, inputEnabled, setActiveDiv } from './index.js'
 import { showQuizzesToTake } from './quizzes.js'
 import { showQuizManagement } from './quizzes.js'
 
@@ -13,6 +13,7 @@ export const handleExploreManage = () => {
   mainNav.addEventListener('click', (e) => {
     // Check if input is enabled and if the clicked element is a BUTTON
     if (inputEnabled && e.target.nodeName === 'BUTTON') {
+      clearMessage()
       if (e.target === navExploreButton) {
         showQuizzesToTake()
       } else if (e.target === navManageQuizzesButton) {
@@ -23,6 +24,7 @@ export const handleExploreManage = () => {
   welcomeDiv.addEventListener('click', (e) => {
     // Check if input is enabled and if the clicked element is a BUTTON
     if (inputEnabled && e.target.nodeName === 'BUTTON') {
+      clearMessage() // Clear any existing messages
       if (e.target === exploreButton) {
         showQuizzesToTake()
       } else if (e.target === manageQuizzesButton) {

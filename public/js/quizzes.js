@@ -7,7 +7,6 @@ import {
   getToken,
   setToken,
   setActiveDiv,
-  setUserName,
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showAddEditQuiz } from './addEditQuiz.js'
@@ -64,8 +63,9 @@ export const handleQuizzes = () => {
 }
 
 export const showQuizzesToTake = async () => {
-  setActiveDiv(quizzesDiv) // Make the quizzes list div visible
+  document.getElementById('add-quiz').classList.add('d-none') // Hide the "Add Quiz" button
   enableInput(false) // Disable input while fetching data
+  setActiveDiv(quizzesDiv) // Make the quizzes list div visible
 
   try {
     const token = getToken() // Get the user's authentication token
@@ -82,6 +82,44 @@ export const showQuizzesToTake = async () => {
     const data = await response.json() // Parse the JSON response
 
     if (response.status === 200) {
+      const quizListDiv = document.getElementById('quizzes-list')
+      quizListDiv.innerHTML = '' // Clear existing
+
+      data.quizzes.forEach((quiz) => {
+        const card = document.createElement('div')
+        card.className =
+          'card mb-3 p-3 d-flex flex-row align-items-center justify-content-between gap-3'
+
+        const titleBlock = document.createElement('div')
+        titleBlock.className = 'text-start'
+        titleBlock.style.maxWidth = '45%'
+        titleBlock.innerHTML = `
+          <h4 class="mb-0">${quiz.title}</h4>
+          <div class="text-secondary">${quiz.description || ''}</div>
+        `
+
+        const rightSide = document.createElement('div')
+        rightSide.className =
+          'd-flex align-items-center gap-3 flex-nowrap justify-content-end'
+
+        const subjectText = document.createElement('div')
+        subjectText.className = 'text-center'
+        subjectText.style.width = '160px'
+        subjectText.textContent = quiz.subject
+
+        const takeButton = document.createElement('button')
+        takeButton.className = 'btn btn-outline-success'
+        takeButton.innerHTML = `<i class="fa fa-play"></i> Take Quiz`
+        takeButton.dataset.id = quiz._id
+
+        rightSide.append(subjectText, takeButton)
+        card.append(titleBlock, rightSide)
+        quizListDiv.appendChild(card)
+      })
+
+      if (isMessageEmpty()) {
+        setMessage(`Found ${data.count} quizzes to take.`)
+      }
     } else if (response.status === 401) {
       // If token is invalid or expired, log off the user
       setMessage('Authentication failed. Please log in again.')
@@ -101,8 +139,9 @@ export const showQuizzesToTake = async () => {
 }
 
 export const showQuizManagement = async () => {
-  setActiveDiv(quizzesDiv) // Make the quizzes list div visible
+  document.getElementById('add-quiz').classList.remove('d-none')
   enableInput(false) // Disable input while fetching data
+  setActiveDiv(quizzesDiv) // Make the quizzes list div visible
 
   try {
     const token = getToken() // Get the user's authentication token

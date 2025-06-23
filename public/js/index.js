@@ -145,9 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setMessage('You have been logged out.')
     userGreeting.textContent = ''
     // Clear the quizzes table body
-    const quizzesTableBody = document.getElementById('quizzes-table-body')
-    if (quizzesTableBody) {
-      quizzesTableBody.innerHTML = ''
+    const quizListDiv = document.getElementById('quizzes-list')
+    if (quizListDiv) {
+      quizListDiv.innerHTML = '' // Clear old content
     }
     const loggedOutDiv = document.getElementById('logged-out')
     setActiveDiv(loggedOutDiv)
