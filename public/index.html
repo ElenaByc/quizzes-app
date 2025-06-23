@@ -338,26 +338,19 @@
         </p>
       </div>
 
-      <div id="quizzes" class="container py-4 w-fit-conten d-none">
+      <div
+        id="quizzes"
+        class="w-fit-conten d-none container mx-auto text-center p-4"
+      >
         <h2>Quizzes</h2>
-        <p id="quizzes-message"></p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Subject</th>
-              <th>Description</th>
-              <th colspan="2"></th>
-            </tr>
-          </thead>
-          <tbody id="quizzes-table-body">
-            <!-- Quiz data rows will go here -->
-          </tbody>
-        </table>
-
-        <button type="button" id="add-quiz">add quiz</button>
-        <button type="button" id="logout">log out</button>
+        <div id="quizzes-list" class="container my-4"></div>
+        <button
+          type="button"
+          id="add-quiz"
+          class="btn btn-outline-secondary btn-lg mx-auto"
+        >
+          Create New Quiz
+        </button>
       </div>
 
       <div id="edit-quiz" class="container py-4 w-fit-conten d-none">

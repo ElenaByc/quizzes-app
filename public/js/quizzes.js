@@ -159,34 +159,143 @@ export const showQuizManagement = async () => {
     const data = await response.json() // Parse the JSON response
 
     if (response.status === 200) {
-      // Check for successful response
-      // Clear previous quizzes from the table
-      quizzesTableBody.innerHTML = ''
+      const quizListDiv = document.getElementById('quizzes-list')
+      quizListDiv.innerHTML = '' // Clear old content
 
-      // Add each quiz to the table
+      //     data.quizzes.forEach((quiz) => {
+      //       const card = document.createElement('div')
+      //       card.className =
+      //         'card mb-3 p-3 d-flex flex-row justify-content-between align-items-center'
+
+      //       const titleBlock = document.createElement('div')
+      //       titleBlock.innerHTML = `
+      //   <h5 class="mb-1">${quiz.title}</h5>
+      //   <div class="text-muted small">${quiz.subject}</div>
+      //   <div class="small text-secondary">${quiz.description}</div>
+      // `
+
+      //       const controlPanel = document.createElement('div')
+      //       controlPanel.className =
+      //         'd-flex align-items-center gap-3 flex-wrap text-center'
+
+      //       const statusLabel = document.createElement('div')
+      //       statusLabel.textContent = quiz.isPublished ? 'Published' : 'Draft'
+      //       statusLabel.className = quiz.isPublished
+      //         ? 'text-success fw-semibold'
+      //         : 'text-secondary fw-semibold'
+
+      //       const questionsButton = document.createElement('button')
+      //       questionsButton.className = 'btn btn-outline-primary btn-sm'
+      //       questionsButton.innerHTML = `<i class="fa fa-list"></i> View Questions`
+      //       questionsButton.dataset.id = quiz._id
+
+      //       const editButton = document.createElement('button')
+      //       editButton.className = 'btn btn-outline-primary btn-sm edit-quiz-button'
+      //       editButton.innerHTML = `<i class="fa fa-pencil"></i> Edit`
+      //       editButton.dataset.id = quiz._id
+
+      //       const deleteButton = document.createElement('button')
+      //       deleteButton.className =
+      //         'btn btn-outline-danger btn-sm delete-quiz-button'
+      //       deleteButton.innerHTML = `<i class="fa fa-trash"></i> Delete`
+      //       deleteButton.dataset.id = quiz._id
+
+      //       controlPanel.append(
+      //         statusLabel,
+      //         questionsButton,
+      //         editButton,
+      //         deleteButton,
+      //       )
+      //       card.append(titleBlock, controlPanel)
+      //       quizListDiv.appendChild(card)
+      //     })
       data.quizzes.forEach((quiz) => {
-        const row = quizzesTableBody.insertRow(-1) // Insert a new row at the end
+        const card = document.createElement('div')
+        card.className =
+          'card mb-3 p-3 d-flex flex-row align-items-center justify-content-between gap-3'
 
-        row.insertCell(0).textContent = quiz.title
-        row.insertCell(1).textContent = quiz.subject
-        row.insertCell(2).textContent = quiz.description
+        // Title on the left
+        const titleBlock = document.createElement('div')
+        titleBlock.className = 'text-start'
+        titleBlock.style.maxWidth = '45%'
+        titleBlock.innerHTML = `
+        <h4 class="mb-0">${quiz.title}</h5>
+        <div class="text-secondary">${quiz.description || ''}</div>
+        `
 
-        // Add an 'Edit' button
-        const editCell = row.insertCell(3)
+        // Right-side: subject + status + buttons grouped
+        const rightSide = document.createElement('div')
+        rightSide.className =
+          'd-flex align-items-center gap-3 flex-nowrap justify-content-end'
+
+        const subjectText = document.createElement('div')
+        subjectText.className = 'text-center'
+        subjectText.style.width = '160px'
+        subjectText.textContent = quiz.subject
+
+        const statusLabel = document.createElement('div')
+        statusLabel.style.width = '120px'
+        statusLabel.className = quiz.isPublished
+          ? 'text-success fw-semibold text-center'
+          : 'text-secondary fw-semibold text-center'
+        statusLabel.textContent = quiz.isPublished ? 'Published' : 'Draft'
+
+        const questionsButton = document.createElement('button')
+        questionsButton.className = 'btn btn-outline-primary'
+        questionsButton.innerHTML = `<i class="fa fa-list"></i> Questions`
+        questionsButton.dataset.id = quiz._id
+
         const editButton = document.createElement('button')
-        editButton.textContent = 'Edit'
-        editButton.dataset.id = quiz._id // Store quiz ID for editing
-        editButton.classList.add('edit-quiz-button') // Add a class for styling/selection
-        editCell.appendChild(editButton)
+        editButton.className = 'btn btn-outline-primary edit-quiz-button'
+        editButton.innerHTML = `<i class="fa fa-pencil"></i> Edit`
+        editButton.dataset.id = quiz._id
 
-        // Add a 'Delete' button
-        const deleteCell = row.insertCell(4)
         const deleteButton = document.createElement('button')
-        deleteButton.textContent = 'Delete'
-        deleteButton.dataset.id = quiz._id // Store quiz ID for deletion
-        deleteButton.classList.add('delete-quiz-button') // Add a class for styling/selection
-        deleteCell.appendChild(deleteButton)
+        deleteButton.className = 'btn btn-outline-danger delete-quiz-button'
+        deleteButton.innerHTML = `<i class="fa fa-trash"></i> Delete`
+        deleteButton.dataset.id = quiz._id
+
+        rightSide.append(
+          subjectText,
+          statusLabel,
+          questionsButton,
+          editButton,
+          deleteButton,
+        )
+
+        // Put title on the left, everything else on the right
+        card.append(titleBlock, rightSide)
+        quizListDiv.appendChild(card)
       })
+
+      // // Check for successful response
+      // // Clear previous quizzes from the table
+      // quizzesTableBody.innerHTML = ''
+
+      // // Add each quiz to the table
+      // data.quizzes.forEach((quiz) => {
+      //   const row = quizzesTableBody.insertRow(-1) // Insert a new row at the end
+
+      //   row.insertCell(0).textContent = quiz.title
+      //   row.insertCell(1).textContent = quiz.subject
+      //   row.insertCell(2).textContent = quiz.description
+
+      //   // Add an 'Edit' button
+      //   const editCell = row.insertCell(3)
+      //   const editButton = document.createElement('button')
+      //   editButton.textContent = 'Edit'
+      //   editButton.dataset.id = quiz._id // Store quiz ID for editing
+      //   editButton.classList.add('edit-quiz-button') // Add a class for styling/selection
+      //   editCell.appendChild(editButton)
+
+      //   // Add a 'Delete' button
+      //   const deleteCell = row.insertCell(4)
+      //   const deleteButton = document.createElement('button')
+      //   deleteButton.textContent = 'Delete'
+      //   deleteButton.dataset.id = quiz._id // Store quiz ID for deletion
+      //   deleteButton.classList.add('delete-quiz-button') // Add a class for styling/selection
+      //   deleteCell.appendChild(deleteButton)
+      // })
       if (isMessageEmpty()) {
         setMessage(`Loaded ${data.count} quizzes.`) // Display number of quizzes loaded
       }
