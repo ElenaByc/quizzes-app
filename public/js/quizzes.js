@@ -13,13 +13,10 @@ import { showLoginRegister } from './loginRegister.js'
 import { showAddEditQuiz } from './addEditQuiz.js'
 
 let quizzesDiv = null
-let quizzesTableBody = null
 
 export const handleQuizzes = () => {
   // Initialize the quizzes-related elements
   quizzesDiv = document.getElementById('quizzes')
-  quizzesTableBody = document.getElementById('quizzes-table-body')
-  const logoutButton = document.getElementById('logout')
   const addQuizButton = document.getElementById('add-quiz')
 
   // Use event delegation on the parent div for button clicks
@@ -27,12 +24,6 @@ export const handleQuizzes = () => {
     if (inputEnabled && e.target.nodeName === 'BUTTON') {
       if (e.target === addQuizButton) {
         showAddEditQuiz(null)
-      } else if (e.target === logoutButton) {
-        setToken(null) // Clear the token to log out
-        setUserName(null) // Clear the username
-        setMessage('You have been logged out.') // Show logout message
-        quizzesTableBody.innerHTML = '' // Clear the quizzes table body
-        showLoginRegister()
       } else if (e.target.classList.contains('edit-quiz-button')) {
         clearMessage()
         showAddEditQuiz(e.target.dataset.id)
@@ -57,7 +48,7 @@ export const handleQuizzes = () => {
           if (response.status === 200) {
             // Check for successful deletion (server returns 200 OK with message)
             setMessage(data.msg || 'The quiz entry was deleted.')
-            showQuizzes() // Refresh the quiz list to show the updated state
+            showQuizManagement() // Refresh the quiz list to show the updated state
           } else {
             setMessage(data.msg || 'Failed to delete quiz.') // Display error message from backend
           }
@@ -91,37 +82,6 @@ export const showQuizzesToTake = async () => {
     const data = await response.json() // Parse the JSON response
 
     if (response.status === 200) {
-      // Check for successful response
-      // Clear previous quizzes from the table
-      quizzesTableBody.innerHTML = ''
-
-      // Add each quiz to the table
-      data.quizzes.forEach((quiz) => {
-        const row = quizzesTableBody.insertRow(-1) // Insert a new row at the end
-
-        row.insertCell(0).textContent = quiz.title
-        row.insertCell(1).textContent = quiz.subject
-        row.insertCell(2).textContent = quiz.description
-
-        // Add an 'Edit' button
-        const editCell = row.insertCell(3)
-        const editButton = document.createElement('button')
-        editButton.textContent = 'Edit'
-        editButton.dataset.id = quiz._id // Store quiz ID for editing
-        editButton.classList.add('edit-quiz-button') // Add a class for styling/selection
-        editCell.appendChild(editButton)
-
-        // Add a 'Delete' button
-        const deleteCell = row.insertCell(4)
-        const deleteButton = document.createElement('button')
-        deleteButton.textContent = 'Delete'
-        deleteButton.dataset.id = quiz._id // Store quiz ID for deletion
-        deleteButton.classList.add('delete-quiz-button') // Add a class for styling/selection
-        deleteCell.appendChild(deleteButton)
-      })
-      if (isMessageEmpty()) {
-        setMessage(`Loaded ${data.count} quizzes.`) // Display number of quizzes loaded
-      }
     } else if (response.status === 401) {
       // If token is invalid or expired, log off the user
       setMessage('Authentication failed. Please log in again.')
@@ -162,53 +122,6 @@ export const showQuizManagement = async () => {
       const quizListDiv = document.getElementById('quizzes-list')
       quizListDiv.innerHTML = '' // Clear old content
 
-      //     data.quizzes.forEach((quiz) => {
-      //       const card = document.createElement('div')
-      //       card.className =
-      //         'card mb-3 p-3 d-flex flex-row justify-content-between align-items-center'
-
-      //       const titleBlock = document.createElement('div')
-      //       titleBlock.innerHTML = `
-      //   <h5 class="mb-1">${quiz.title}</h5>
-      //   <div class="text-muted small">${quiz.subject}</div>
-      //   <div class="small text-secondary">${quiz.description}</div>
-      // `
-
-      //       const controlPanel = document.createElement('div')
-      //       controlPanel.className =
-      //         'd-flex align-items-center gap-3 flex-wrap text-center'
-
-      //       const statusLabel = document.createElement('div')
-      //       statusLabel.textContent = quiz.isPublished ? 'Published' : 'Draft'
-      //       statusLabel.className = quiz.isPublished
-      //         ? 'text-success fw-semibold'
-      //         : 'text-secondary fw-semibold'
-
-      //       const questionsButton = document.createElement('button')
-      //       questionsButton.className = 'btn btn-outline-primary btn-sm'
-      //       questionsButton.innerHTML = `<i class="fa fa-list"></i> View Questions`
-      //       questionsButton.dataset.id = quiz._id
-
-      //       const editButton = document.createElement('button')
-      //       editButton.className = 'btn btn-outline-primary btn-sm edit-quiz-button'
-      //       editButton.innerHTML = `<i class="fa fa-pencil"></i> Edit`
-      //       editButton.dataset.id = quiz._id
-
-      //       const deleteButton = document.createElement('button')
-      //       deleteButton.className =
-      //         'btn btn-outline-danger btn-sm delete-quiz-button'
-      //       deleteButton.innerHTML = `<i class="fa fa-trash"></i> Delete`
-      //       deleteButton.dataset.id = quiz._id
-
-      //       controlPanel.append(
-      //         statusLabel,
-      //         questionsButton,
-      //         editButton,
-      //         deleteButton,
-      //       )
-      //       card.append(titleBlock, controlPanel)
-      //       quizListDiv.appendChild(card)
-      //     })
       data.quizzes.forEach((quiz) => {
         const card = document.createElement('div')
         card.className =
@@ -268,36 +181,9 @@ export const showQuizManagement = async () => {
         quizListDiv.appendChild(card)
       })
 
-      // // Check for successful response
-      // // Clear previous quizzes from the table
-      // quizzesTableBody.innerHTML = ''
-
-      // // Add each quiz to the table
-      // data.quizzes.forEach((quiz) => {
-      //   const row = quizzesTableBody.insertRow(-1) // Insert a new row at the end
-
-      //   row.insertCell(0).textContent = quiz.title
-      //   row.insertCell(1).textContent = quiz.subject
-      //   row.insertCell(2).textContent = quiz.description
-
-      //   // Add an 'Edit' button
-      //   const editCell = row.insertCell(3)
-      //   const editButton = document.createElement('button')
-      //   editButton.textContent = 'Edit'
-      //   editButton.dataset.id = quiz._id // Store quiz ID for editing
-      //   editButton.classList.add('edit-quiz-button') // Add a class for styling/selection
-      //   editCell.appendChild(editButton)
-
-      //   // Add a 'Delete' button
-      //   const deleteCell = row.insertCell(4)
-      //   const deleteButton = document.createElement('button')
-      //   deleteButton.textContent = 'Delete'
-      //   deleteButton.dataset.id = quiz._id // Store quiz ID for deletion
-      //   deleteButton.classList.add('delete-quiz-button') // Add a class for styling/selection
-      //   deleteCell.appendChild(deleteButton)
-      // })
       if (isMessageEmpty()) {
-        setMessage(`Loaded ${data.count} quizzes.`) // Display number of quizzes loaded
+        // If no previous message, display the number of quizzes loaded
+        setMessage(`Loaded ${data.count} quizzes.`)
       }
     } else if (response.status === 401) {
       // If token is invalid or expired, log off the user
