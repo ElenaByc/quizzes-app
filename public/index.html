@@ -349,38 +349,108 @@
           id="add-quiz"
           class="btn btn-outline-secondary btn-lg mx-auto"
         >
-          Create New Quiz
+          Add New Quiz
         </button>
       </div>
 
-      <div id="edit-quiz" class="container py-4 w-fit-conten d-none">
-        <h2>Edit Quiz</h2>
-        <form id="edit-quiz-form">
-          <div>
-            <label for="quiz-title">Title:</label>
-            <input type="text" id="quiz-title" />
+      <div
+        id="edit-quiz"
+        class="container d-none py-4 w-fit-content text-center"
+      >
+        <h2 id="edit-quiz-title" class="mb-4">Create New Quiz</h2>
+
+        <form
+          id="edit-quiz-form"
+          class="d-flex flex-column gap-3 needs-validation"
+          novalidate
+          autocomplete="off"
+        >
+          <div class="form-floating">
+            <input
+              type="text"
+              id="quiz-title"
+              class="form-control"
+              placeholder="Title"
+              required
+            />
+            <label for="quiz-title">Title</label>
+            <div class="invalid-feedback">Please enter a title</div>
           </div>
-          <div>
-            <label for="quiz-description">Description:</label>
-            <input type="text" id="quiz-description" />
+
+          <div class="form-floating">
+            <input
+              type="text"
+              id="quiz-description"
+              class="form-control"
+              placeholder="Description"
+            />
+            <label for="quiz-description">Description</label>
           </div>
-          <div>
-            <label for="quiz-subject">Subject:</label>
-            <select id="quiz-subject">
-              <option value="" disabled selected>--Select subject--</option>
-              <option value="Math">Math</option>
-              <option value="Science">Science</option>
+
+          <div class="form-floating">
+            <select id="quiz-subject" class="form-select" required>
+              <option value="" disabled selected hidden></option>
+              <option value="Astronomy">Astronomy</option>
+              <option value="Biology">Biology</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Geography">Geography</option>
               <option value="History">History</option>
               <option value="Literature">Literature</option>
-              <option value="Geography">Geography</option>
+              <option value="Math">Math</option>
+              <option value="Physics">Physics</option>
             </select>
+            <label for="quiz-subject">Subject</label>
+            <div class="invalid-feedback">Please select a subject</div>
           </div>
-          <!--    TODO: Question and answer fields.
-                    This part is complex due to the nested structure of the quiz model.
-                    This functionality will be addressed later, potentially after 
-                    the quiz model has been reorganized. -->
-          <button type="submit" id="submit-quiz">Save</button>
-          <button type="button" id="cancel-edit-quiz">Cancel</button>
+
+          <!-- Only visible for editing -->
+          <div class="d-none" id="is-published-group">
+            <label class="form-label">Status</label>
+            <div class="d-flex justify-content-center gap-4">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isPublished"
+                  id="draft"
+                  value="false"
+                  checked
+                />
+                <label class="form-check-label text-secondary" for="draft"
+                  >Draft</label
+                >
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="isPublished"
+                  id="published"
+                  value="true"
+                />
+                <label class="form-check-label text-success" for="published"
+                  >Published</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-3 pt-3">
+            <button
+              type="submit"
+              id="submit-quiz"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Add New Quiz
+            </button>
+            <button
+              type="button"
+              id="cancel-edit-quiz"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </main>

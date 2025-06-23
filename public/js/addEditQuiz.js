@@ -13,6 +13,7 @@ let addEditQuizForm = null
 let quizTitle = null
 let quizDescription = null
 let quizSubject = null
+let quizStatusGroup = null
 let submitQuizButton = null
 
 export const handleAddEditQuiz = () => {
@@ -21,6 +22,7 @@ export const handleAddEditQuiz = () => {
   quizTitle = document.getElementById('quiz-title')
   quizDescription = document.getElementById('quiz-description')
   quizSubject = document.getElementById('quiz-subject')
+  quizStatusGroup = document.getElementById('is-published-group')
   submitQuizButton = document.getElementById('submit-quiz')
   const cancelEditQuizButton = document.getElementById('cancel-edit-quiz')
 
@@ -40,10 +42,19 @@ export const handleAddEditQuiz = () => {
         let method = 'POST' // Default method is POST for creating a new quiz
         let url = '/api/v1/quizzes' // Default URL for creating quizzes
         let successMessage = 'New quiz was created.' // Default success message
+        let isPublished = false
+        if (quizStatusGroup && !quizStatusGroup.classList.contains('d-none')) {
+          const selectedStatus = addEditQuizForm.querySelector(
+            'input[name="isPublished"]:checked',
+          )
+          if (selectedStatus) {
+            isPublished = selectedStatus.value === 'true'
+          }
+        }
 
         // Check if we are updating an existing quiz based on the button text and stored ID
         if (
-          submitQuizButton.textContent === 'update quiz' &&
+          submitQuizButton.textContent === 'Update Quiz' &&
           addEditQuizDiv.dataset.id
         ) {
           method = 'PATCH' // Change method to PATCH for updating
@@ -64,7 +75,7 @@ export const handleAddEditQuiz = () => {
               title: quizTitle.value,
               description: quizDescription.value,
               subject: quizSubject.value,
-              // TODO: Add questions and answers later
+              isPublished: isPublished,
             }),
           })
 
@@ -99,14 +110,16 @@ export const handleAddEditQuiz = () => {
 
 // Shows the add/edit quiz form. 'quizId' parameter for editing a specific quiz.
 export const showAddEditQuiz = async (quizId) => {
+  const formTitle = document.getElementById('edit-quiz-title')
   clearMessage() // Clear any previous messages
 
   // If quizId is null, it means we are adding a new quiz
   if (!quizId) {
-    // Reset form fields to default for adding a new quiz
     clearAddEditQuizForm()
-    submitQuizButton.textContent = 'add quiz'
+    formTitle.textContent = 'Create New Quiz'
+    submitQuizButton.textContent = 'Add New Quiz'
     addEditQuizDiv.dataset.id = '' // Clear any previous quiz ID stored in the div
+    quizStatusGroup.classList.add('d-none') // Hide the isPublished selector
     setActiveDiv(addEditQuizDiv) // Make the edit/add quiz form div visible
   } else {
     // If quizId is provided, we are editing an existing quiz
@@ -114,6 +127,9 @@ export const showAddEditQuiz = async (quizId) => {
 
     try {
       const token = getToken() // Get the authentication token
+      formTitle.textContent = 'Edit Quiz'
+      submitQuizButton.textContent = 'Update Quiz'
+      quizStatusGroup.classList.remove('d-none') // Show the isPublished selector
 
       // Fetch the specific quiz data from the backend
       const response = await fetch(`/api/v1/quizzes/${quizId}`, {
@@ -132,8 +148,13 @@ export const showAddEditQuiz = async (quizId) => {
         quizTitle.value = data.quiz.title
         quizDescription.value = data.quiz.description || ''
         quizSubject.value = data.quiz.subject
-        submitQuizButton.textContent = 'update quiz'
-        addEditQuizDiv.dataset.id = quizId // Store the quiz ID in the div for later use in PATCH request
+
+        // Store the quiz ID in the div for later use in PATCH request
+        addEditQuizDiv.dataset.id = quizId
+
+        // Update publish status radio button
+        const statusRadio = data.quiz.isPublished ? 'published' : 'draft'
+        document.getElementById(statusRadio).checked = true
 
         setActiveDiv(addEditQuizDiv) // Make the form div visible
       } else {
