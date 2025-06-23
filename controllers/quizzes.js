@@ -33,7 +33,7 @@ const createQuiz = async (req, res) => {
   console.log('Creating quiz with data:', req.body, 'by user:', req.user.userId)
 
   const {
-    body: { title, subject },
+    body: { title, subject, description },
     user: { userId },
   } = req
 
@@ -43,7 +43,12 @@ const createQuiz = async (req, res) => {
 
   // `isPublished` is intentionally excluded during quiz creation.
   // Publishing must go through the update flow, where validation is enforced.
-  const quiz = await Quiz.create({ title, subject, createdBy: userId })
+  const quiz = await Quiz.create({
+    title,
+    subject,
+    description,
+    createdBy: userId,
+  })
 
   res.status(StatusCodes.CREATED).json({ quiz })
 }
@@ -52,7 +57,7 @@ const updateQuiz = async (req, res) => {
   console.log('Updating quiz with data:', req.body)
 
   const {
-    body: { title, subject, isPublished },
+    body: { title, subject, description, isPublished },
     user: { userId },
     params: { id: quizId },
   } = req
@@ -98,7 +103,7 @@ const updateQuiz = async (req, res) => {
 
   quiz = await Quiz.findOneAndUpdate(
     { _id: quizId, createdBy: userId },
-    { title, subject, isPublished },
+    { title, subject, description, isPublished },
     { new: true, runValidators: true },
   )
 
