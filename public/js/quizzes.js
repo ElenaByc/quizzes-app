@@ -10,6 +10,7 @@ import {
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showAddEditQuiz } from './addEditQuiz.js'
+import { showQuizQuestions } from './questions.js'
 
 let quizzesDiv = null
 
@@ -57,6 +58,10 @@ export const handleQuizzes = () => {
         } finally {
           enableInput(true) // Re-enable input regardless of success or failure
         }
+      } else if (e.target.classList.contains('quiz-questions-button')) {
+        clearMessage()
+        const quizId = e.target.dataset.id
+        showQuizQuestions(quizId)
       }
     }
   })
@@ -108,7 +113,7 @@ export const showQuizzesToTake = async () => {
         subjectText.textContent = quiz.subject
 
         const takeButton = document.createElement('button')
-        takeButton.className = 'btn btn-outline-success'
+        takeButton.className = 'btn btn-outline-secondary take-quiz-button'
         takeButton.innerHTML = `<i class="fa fa-play"></i> Take Quiz`
         takeButton.dataset.id = quiz._id
 
@@ -165,13 +170,12 @@ export const showQuizManagement = async () => {
         const card = document.createElement('div')
         card.className =
           'card mb-3 p-3 d-flex flex-row align-items-center justify-content-between gap-3'
-
         // Title on the left
         const titleBlock = document.createElement('div')
         titleBlock.className = 'text-start'
         titleBlock.style.maxWidth = '45%'
         titleBlock.innerHTML = `
-        <h4 class="mb-0">${quiz.title}</h5>
+        <h4 class="mb-0">${quiz.title}</h4>
         <div class="text-secondary">${quiz.description || ''}</div>
         `
 
@@ -193,12 +197,13 @@ export const showQuizManagement = async () => {
         statusLabel.textContent = quiz.isPublished ? 'Published' : 'Draft'
 
         const questionsButton = document.createElement('button')
-        questionsButton.className = 'btn btn-outline-primary'
+        questionsButton.className =
+          'btn btn-outline-secondary quiz-questions-button'
         questionsButton.innerHTML = `<i class="fa fa-list"></i> Questions`
         questionsButton.dataset.id = quiz._id
 
         const editButton = document.createElement('button')
-        editButton.className = 'btn btn-outline-primary edit-quiz-button'
+        editButton.className = 'btn btn-outline-secondary edit-quiz-button'
         editButton.innerHTML = `<i class="fa fa-pencil"></i> Edit`
         editButton.dataset.id = quiz._id
 

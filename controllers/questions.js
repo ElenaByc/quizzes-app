@@ -28,10 +28,14 @@ const getQuestionsByQuiz = async (req, res) => {
   const { quizId } = req.params
 
   // Check if the user has access to the quiz
-  await checkQuizAccess(quizId, req.user.userId)
+  const quiz = await checkQuizAccess(quizId, req.user.userId)
   const questions = await Question.find({ quizId })
 
-  res.status(StatusCodes.OK).json({ questions, count: questions.length })
+  res.status(StatusCodes.OK).json({
+    quiz: { id: quizId, title: quiz.title },
+    questions,
+    count: questions.length,
+  })
 }
 
 // Update a specific question
