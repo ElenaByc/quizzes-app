@@ -10,6 +10,7 @@ import {
 } from './index.js'
 import { showLoginRegister } from './loginRegister.js'
 import { showQuizManagement } from './quizzes.js'
+import { showAddEditQuestion } from './addEditQuestion.js'
 
 let questionsDiv = null
 
@@ -21,7 +22,8 @@ export const handleQuestions = () => {
   questionsDiv.addEventListener('click', async (e) => {
     if (inputEnabled && e.target.nodeName === 'BUTTON') {
       if (e.target === addQuestionButton) {
-        // showAddEditQuestion(null)
+        const quizId = document.getElementById('question-quiz-id')?.value
+        showAddEditQuestion(null, quizId)
       } else if (e.target === backToQuizzesButton) {
         clearMessage()
         showQuizManagement()
@@ -34,6 +36,8 @@ export const handleQuestions = () => {
 export const showQuizQuestions = async (quizId) => {
   enableInput(false)
   setActiveDiv(questionsDiv)
+  // set quizId in the hidden input field for adding/editing questions
+  document.getElementById('question-quiz-id').value = quizId
 
   try {
     const token = getToken()

@@ -475,6 +475,89 @@
           </div>
         </form>
       </div>
+
+      <div
+        id="edit-question"
+        class="container d-none py-4 w-fit-content text-center"
+      >
+        <h2 id="edit-question-title" class="mb-4">Create New Question</h2>
+
+        <form
+          id="edit-question-form"
+          class="d-flex flex-column gap-3 needs-validation"
+          novalidate
+          autocomplete="off"
+        >
+          <!-- Hidden input to store the quiz ID -->
+          <input type="hidden" id="question-quiz-id" />
+
+          <div class="form-floating">
+            <input
+              type="text"
+              id="question-text"
+              class="form-control"
+              placeholder="Question Text"
+              required
+            />
+            <label for="question-text">Question Text</label>
+            <div class="invalid-feedback">Please enter question text</div>
+          </div>
+
+          <div>
+            <label class="form-label">Question Type</label>
+            <div class="d-flex justify-content-center gap-4">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="questionType"
+                  id="single-choice"
+                  value="single_choice"
+                  checked
+                />
+                <label
+                  class="form-check-label text-primary"
+                  for="single-choice"
+                >
+                  Single Choice
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="questionType"
+                  id="multiple-choice"
+                  value="multiple_choice"
+                />
+                <label
+                  class="form-check-label text-primary"
+                  for="multiple-choice"
+                >
+                  Multiple Choice
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-3 pt-3">
+            <button
+              type="submit"
+              id="submit-question"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Add New Question
+            </button>
+            <button
+              type="button"
+              id="cancel-edit-question"
+              class="btn btn-outline-secondary btn-lg"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </main>
 
     <script src="./js/index.js" type="module"></script>
