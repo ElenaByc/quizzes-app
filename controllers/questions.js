@@ -83,6 +83,9 @@ const updateQuestion = async (req, res) => {
 const deleteQuestion = async (req, res) => {
   const { id: questionId } = req.params
 
+  console.log('Deleting question with ID:', questionId)
+  console.log('User ID:', req.user.userId)
+
   // Check if the question exists
   const question = await Question.findById(questionId)
   if (!question) {

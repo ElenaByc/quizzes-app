@@ -16,22 +16,56 @@ let questionsDiv = null
 
 export const handleQuestions = () => {
   questionsDiv = document.getElementById('questions')
-  const addQuestionButton = document.getElementById('add-question')
-  const backToQuizzesButton = document.getElementById('back-to-quizzes')
 
   questionsDiv.addEventListener('click', async (e) => {
-    if (inputEnabled && e.target.nodeName === 'BUTTON') {
-      if (e.target === addQuestionButton) {
-        const quizId = document.getElementById('question-quiz-id')?.value
-        showAddEditQuestion(null, quizId)
-      } else if (e.target === backToQuizzesButton) {
-        clearMessage()
-        showQuizManagement()
-      } else if (e.target.closest('.edit-question-button')) {
-        const button = e.target.closest('.edit-question-button')
-        const questionId = button.dataset.id
-        const quizId = document.getElementById('question-quiz-id')?.value
-        showAddEditQuestion(questionId, quizId)
+    if (!inputEnabled) return
+
+    const addBtn = e.target.closest('#add-question')
+    const backBtn = e.target.closest('#back-to-quizzes')
+    const editBtn = e.target.closest('.edit-question-button')
+    const deleteBtn = e.target.closest('.delete-question-button')
+
+    if (addBtn) {
+      const quizId = document.getElementById('question-quiz-id')?.value
+      showAddEditQuestion(null, quizId)
+    } else if (backBtn) {
+      clearMessage()
+      showQuizManagement()
+    } else if (editBtn) {
+      const questionId = editBtn.dataset.id
+      const quizId = document.getElementById('question-quiz-id')?.value
+      clearMessage()
+      showAddEditQuestion(questionId, quizId)
+    } else if (deleteBtn) {
+      enableInput(false) // Disable input during the operation
+      const questionId = deleteBtn.dataset.id
+      const quizId = document.getElementById('question-quiz-id')?.value
+
+      try {
+        const token = getToken()
+        const response = await fetch(`/api/v1/questions/${questionId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        const data = await response.json()
+
+        if (response.status === 200) {
+          setMessage(data.msg || 'Question deleted.')
+          showQuizQuestions(quizId)
+        } else {
+          setMessage(data.msg || 'Failed to delete question.')
+        }
+      } catch (err) {
+        console.error(err)
+        setMessage(
+          'A communication error occurred while deleting the question.',
+        )
+      } finally {
+        enableInput(true)
       }
     }
   })

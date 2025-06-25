@@ -21,48 +21,53 @@ export const handleQuizzes = () => {
 
   // Use event delegation on the parent div for button clicks
   quizzesDiv.addEventListener('click', async (e) => {
-    if (inputEnabled && e.target.nodeName === 'BUTTON') {
-      if (e.target === addQuizButton) {
-        showAddEditQuiz(null)
-      } else if (e.target.classList.contains('edit-quiz-button')) {
-        clearMessage()
-        showAddEditQuiz(e.target.dataset.id)
-      } else if (e.target.classList.contains('delete-quiz-button')) {
-        enableInput(false) // Disable input during the operation
-        const quizId = e.target.dataset.id // Get the ID of the quiz to be deleted
+    if (!inputEnabled) return
 
-        try {
-          const token = getToken() // Get the authentication token
+    const editBtn = e.target.closest('.edit-quiz-button')
+    const deleteBtn = e.target.closest('.delete-quiz-button')
+    const questionsBtn = e.target.closest('.quiz-questions-button')
+    const addQuizBtn = e.target.closest('#add-quiz')
 
-          // Send a DELETE request to the server
-          const response = await fetch(`/api/v1/quizzes/${quizId}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`, // Include the JWT token for authentication
-            },
-          })
+    if (addQuizBtn) {
+      showAddEditQuiz(null)
+    } else if (editBtn) {
+      clearMessage()
+      showAddEditQuiz(editBtn.dataset.id)
+    } else if (deleteBtn) {
+      enableInput(false) // Disable input during the operation
+      const quizId = deleteBtn.dataset.id // Get the ID of the quiz to be deleted
 
-          const data = await response.json() // Parse the JSON response
+      try {
+        const token = getToken() // Get the authentication token
 
-          if (response.status === 200) {
-            // Check for successful deletion (server returns 200 OK with message)
-            setMessage(data.msg || 'The quiz entry was deleted.')
-            showQuizManagement() // Refresh the quiz list to show the updated state
-          } else {
-            setMessage(data.msg || 'Failed to delete quiz.') // Display error message from backend
-          }
-        } catch (err) {
-          console.error(err) // Log network errors to console
-          setMessage('A communication error occurred while deleting quiz.') // Generic error message for user
-        } finally {
-          enableInput(true) // Re-enable input regardless of success or failure
+        // Send a DELETE request to the server
+        const response = await fetch(`/api/v1/quizzes/${quizId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Include the JWT token for authentication
+          },
+        })
+
+        const data = await response.json() // Parse the JSON response
+
+        if (response.status === 200) {
+          // Check for successful deletion (server returns 200 OK with message)
+          setMessage(data.msg || 'The quiz entry was deleted.')
+          showQuizManagement() // Refresh the quiz list to show the updated state
+        } else {
+          setMessage(data.msg || 'Failed to delete quiz.') // Display error message from backend
         }
-      } else if (e.target.classList.contains('quiz-questions-button')) {
-        clearMessage()
-        const quizId = e.target.dataset.id
-        showQuizQuestions(quizId)
+      } catch (err) {
+        console.error(err) // Log network errors to console
+        setMessage('A communication error occurred while deleting quiz.') // Generic error message for user
+      } finally {
+        enableInput(true) // Re-enable input regardless of success or failure
       }
+    } else if (questionsBtn) {
+      clearMessage()
+      const quizId = questionsBtn.dataset.id
+      showQuizQuestions(quizId)
     }
   })
 }
