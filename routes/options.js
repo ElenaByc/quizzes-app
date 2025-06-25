@@ -5,10 +5,11 @@ const {
   updateOption,
   deleteOption,
   getOptionsByQuestion,
+  getOptionById,
 } = require('../controllers/options')
 
 router.route('/').post(createOption)
-router.route('/:id').patch(updateOption).delete(deleteOption)
+router.route('/:id').get(getOptionById).patch(updateOption).delete(deleteOption)
 router.route('/question/:questionId').get(getOptionsByQuestion)
 
 module.exports = router

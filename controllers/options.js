@@ -33,6 +33,26 @@ const getOptionsByQuestion = async (req, res) => {
   res.status(StatusCodes.OK).json({ options, count: options.length })
 }
 
+// Get a specific answer option by ID
+const getOptionById = async (req, res) => {
+  const { id: optionId } = req.params
+
+  const option = await Option.findById(optionId)
+  if (!option) {
+    throw new NotFoundError(`No option found with ID: ${optionId}`)
+  }
+
+  const question = await Question.findById(option.questionId)
+  if (!question) {
+    throw new NotFoundError(`Parent question not found for this option`)
+  }
+
+  // Check if the user has access to the quiz associated with the question
+  await checkQuizAccess(question.quizId, req.user.userId)
+
+  res.status(StatusCodes.OK).json({ option })
+}
+
 // Update a specific option
 const updateOption = async (req, res) => {
   const { id: optionId } = req.params
@@ -77,7 +97,8 @@ const deleteOption = async (req, res) => {
 
 module.exports = {
   createOption,
-  getOptionsByQuestion,
   updateOption,
   deleteOption,
+  getOptionsByQuestion,
+  getOptionById,
 }
