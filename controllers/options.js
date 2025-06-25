@@ -30,7 +30,11 @@ const getOptionsByQuestion = async (req, res) => {
 
   const options = await Option.find({ questionId })
 
-  res.status(StatusCodes.OK).json({ options, count: options.length })
+  res.status(StatusCodes.OK).json({
+    questionText: question.questionText,
+    options,
+    count: options.length,
+  })
 }
 
 // Get a specific answer option by ID

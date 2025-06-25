@@ -375,6 +375,33 @@
         </div>
       </div>
 
+      <div id="options" class="d-none container mx-auto text-center p-4">
+        <h2>
+          Question Text: <span id="options-question-text">Sample Question</span>
+        </h2>
+        <h3>Answer Options</h3>
+
+        <!-- List of option cards -->
+        <div id="options-list" class="container my-4"></div>
+
+        <div class="d-flex justify-content-center gap-3 pt-3">
+          <button
+            type="button"
+            id="add-option"
+            class="btn btn-outline-secondary btn-lg"
+          >
+            Add New Option
+          </button>
+          <button
+            type="button"
+            id="back-to-questions"
+            class="btn btn-outline-secondary btn-lg"
+          >
+            Back to Questions
+          </button>
+        </div>
+      </div>
+
       <div
         id="edit-quiz"
         class="container d-none py-4 w-fit-content text-center"
@@ -488,9 +515,6 @@
           novalidate
           autocomplete="off"
         >
-          <!-- Hidden input to store the quiz ID -->
-          <input type="hidden" id="question-quiz-id" />
-
           <div class="form-floating">
             <input
               type="text"
@@ -558,6 +582,9 @@
           </div>
         </form>
       </div>
+
+      <!-- Hidden input to store the quiz ID -->
+      <input type="hidden" id="question-quiz-id" />
     </main>
 
     <script src="./js/index.js" type="module"></script>

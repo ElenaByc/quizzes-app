@@ -11,6 +11,7 @@ import {
 import { showLoginRegister } from './loginRegister.js'
 import { showQuizManagement } from './quizzes.js'
 import { showAddEditQuestion } from './addEditQuestion.js'
+import { showOptionsForQuestion } from './options.js'
 
 let questionsDiv = null
 
@@ -24,6 +25,7 @@ export const handleQuestions = () => {
     const backBtn = e.target.closest('#back-to-quizzes')
     const editBtn = e.target.closest('.edit-question-button')
     const deleteBtn = e.target.closest('.delete-question-button')
+    const optionsBtn = e.target.closest('.question-options-button')
 
     if (addBtn) {
       const quizId = document.getElementById('question-quiz-id')?.value
@@ -31,6 +33,10 @@ export const handleQuestions = () => {
     } else if (backBtn) {
       clearMessage()
       showQuizManagement()
+    } else if (optionsBtn) {
+      const questionId = optionsBtn.dataset.id
+      clearMessage()
+      showOptionsForQuestion(questionId)
     } else if (editBtn) {
       const questionId = editBtn.dataset.id
       const quizId = document.getElementById('question-quiz-id')?.value

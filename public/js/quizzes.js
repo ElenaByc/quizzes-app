@@ -15,9 +15,7 @@ import { showQuizQuestions } from './questions.js'
 let quizzesDiv = null
 
 export const handleQuizzes = () => {
-  // Initialize the quizzes-related elements
   quizzesDiv = document.getElementById('quizzes')
-  const addQuizButton = document.getElementById('add-quiz')
 
   // Use event delegation on the parent div for button clicks
   quizzesDiv.addEventListener('click', async (e) => {
