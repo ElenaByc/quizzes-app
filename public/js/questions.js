@@ -27,6 +27,11 @@ export const handleQuestions = () => {
       } else if (e.target === backToQuizzesButton) {
         clearMessage()
         showQuizManagement()
+      } else if (e.target.closest('.edit-question-button')) {
+        const button = e.target.closest('.edit-question-button')
+        const questionId = button.dataset.id
+        const quizId = document.getElementById('question-quiz-id')?.value
+        showAddEditQuestion(questionId, quizId)
       }
     }
   })

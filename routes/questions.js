@@ -3,12 +3,17 @@ const router = express.Router()
 const {
   createQuestion,
   getQuestionsByQuiz,
+  getQuestionById,
   updateQuestion,
   deleteQuestion,
 } = require('../controllers/questions')
 
 router.route('/').post(createQuestion)
 router.route('/quiz/:quizId').get(getQuestionsByQuiz)
-router.route('/:id').patch(updateQuestion).delete(deleteQuestion)
+router
+  .route('/:id')
+  .get(getQuestionById)
+  .patch(updateQuestion)
+  .delete(deleteQuestion)
 
 module.exports = router

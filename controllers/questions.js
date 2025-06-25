@@ -38,6 +38,21 @@ const getQuestionsByQuiz = async (req, res) => {
   })
 }
 
+// Get a specific question by ID
+const getQuestionById = async (req, res) => {
+  const { id: questionId } = req.params
+
+  const question = await Question.findById(questionId)
+  if (!question) {
+    throw new NotFoundError(`No question found with ID: ${questionId}`)
+  }
+
+  // Check if the user has access to the quiz associated with the question
+  await checkQuizAccess(question.quizId, req.user.userId)
+
+  res.status(StatusCodes.OK).json({ question })
+}
+
 // Update a specific question
 const updateQuestion = async (req, res) => {
   const { id: questionId } = req.params
@@ -93,6 +108,7 @@ const deleteQuestion = async (req, res) => {
 module.exports = {
   createQuestion,
   getQuestionsByQuiz,
+  getQuestionById,
   updateQuestion,
   deleteQuestion,
 }
