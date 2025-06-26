@@ -117,7 +117,7 @@ export const showQuizzesToTake = async () => {
 
         const takeButton = document.createElement('button')
         takeButton.className = 'btn btn-outline-secondary take-quiz-button'
-        takeButton.innerHTML = `<i class="fa fa-play"></i> Take Quiz`
+        takeButton.innerHTML = `Take Quiz`
         takeButton.dataset.id = quiz._id
 
         rightSide.append(subjectText, takeButton)
