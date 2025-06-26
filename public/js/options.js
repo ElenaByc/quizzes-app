@@ -35,10 +35,34 @@ export const handleOptions = () => {
       clearMessage()
       const quizId = document.getElementById('question-quiz-id')?.value
       showQuizQuestions(quizId)
-    } else if (editBtn) {
-      console.log('Edit option:', editBtn.dataset.id)
     } else if (deleteBtn) {
-      console.log('Delete option:', deleteBtn.dataset.id)
+      const optionId = deleteBtn.dataset.id
+      const questionId = document.getElementById('option-question-id')?.value
+
+      enableInput(false)
+      try {
+        const token = getToken()
+        const response = await fetch(`/api/v1/options/${optionId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        const data = await response.json()
+
+        if (response.status === 200) {
+          setMessage('Option deleted successfully.')
+          showOptionsForQuestion(questionId)
+        } else {
+          setMessage(data.msg || 'Failed to delete the option.')
+        }
+      } catch (err) {
+        console.error(err)
+        setMessage('A communication error occurred while deleting the option.')
+      } finally {
+        enableInput(true)
+      }
     }
   })
 }
