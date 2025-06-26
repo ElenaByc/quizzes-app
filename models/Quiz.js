@@ -23,6 +23,7 @@ const QuizSchema = new mongoose.Schema(
         'History',
         'Literature',
         'Geography',
+        'Music',
         'Other',
       ],
       required: [true, 'Please select a subject for the quiz'],
