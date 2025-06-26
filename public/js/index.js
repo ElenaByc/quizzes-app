@@ -7,6 +7,7 @@ import { handleAddEditQuiz } from './addEditQuiz.js'
 import { handleQuestions } from './questions.js'
 import { handleAddEditQuestion } from './addEditQuestion.js'
 import { handleOptions } from './options.js'
+import { handleAddEditOption } from './addEditOption.js'
 
 // Flag indicating if user input is enabled (e.g., during an API request)
 export let inputEnabled = true
@@ -125,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   handleQuestions()
   handleAddEditQuestion()
   handleOptions()
+  handleAddEditOption()
 
   if (userName) {
     userGreeting.textContent = `Welcome, ${userName}`

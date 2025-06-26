@@ -9,6 +9,7 @@ import {
 } from './index.js'
 
 import { showQuizQuestions } from './questions.js'
+import { showAddEditOption } from './addEditOption.js'
 
 let optionsDiv = null
 
@@ -24,7 +25,12 @@ export const handleOptions = () => {
     const deleteBtn = e.target.closest('.delete-option-button')
 
     if (addBtn) {
-      console.log('Add new option clicked')
+      const questionId = document.getElementById('option-question-id')?.value
+      showAddEditOption(null, questionId)
+    } else if (editBtn) {
+      const optionId = editBtn.dataset.id
+      const questionId = document.getElementById('option-question-id')?.value
+      showAddEditOption(optionId, questionId)
     } else if (backBtn) {
       clearMessage()
       const quizId = document.getElementById('question-quiz-id')?.value
@@ -41,6 +47,7 @@ export const handleOptions = () => {
 export const showOptionsForQuestion = async (questionId) => {
   enableInput(false)
   setActiveDiv(optionsDiv)
+  document.getElementById('option-question-id').value = questionId
 
   try {
     const token = getToken()
