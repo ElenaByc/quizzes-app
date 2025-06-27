@@ -8,7 +8,8 @@
 }
 
 #edit-quiz-form,
-#edit-question-form {
+#edit-question-form,
+#edit-option-form {
     width: 600px;
 }
 
