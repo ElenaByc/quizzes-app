@@ -17,6 +17,7 @@ const getQuizzesCreatedByUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ quizzes, count: quizzes.length })
 }
 
+// Called only by the user who created the quiz when the quiz is edited
 const getQuiz = async (req, res) => {
   const {
     user: { userId },
@@ -27,6 +28,49 @@ const getQuiz = async (req, res) => {
     throw new NotFoundError(`No quiz found with ID: ${quizId}`)
   }
   res.status(StatusCodes.OK).json({ quiz })
+}
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+}
+
+const getQuizForTaking = async (req, res) => {
+  const { id: quizId } = req.params
+
+  const quiz = await Quiz.findOne({ _id: quizId, isPublished: true })
+  if (!quiz) {
+    throw new NotFoundError(`Quiz with ID ${quizId} not found or unpublished`)
+  }
+
+  const questions = await Question.find({ quizId })
+  shuffleArray(questions)
+  const questionsWithOptions = []
+
+  for (const question of questions) {
+    const options = await Option.find({ questionId: question._id })
+    shuffleArray(options)
+    questionsWithOptions.push({
+      _id: question._id,
+      questionText: question.questionText,
+      type: question.type,
+      options: options.map((opt) => ({
+        _id: opt._id,
+        optionText: opt.optionText,
+      })),
+    })
+  }
+
+  res.status(StatusCodes.OK).json({
+    quiz: {
+      _id: quiz._id,
+      title: quiz.title,
+      subject: quiz.subject,
+      questions: questionsWithOptions,
+    },
+  })
 }
 
 const createQuiz = async (req, res) => {
@@ -138,6 +182,7 @@ const deleteQuiz = async (req, res) => {
 
 module.exports = {
   getAllPublishedQuizzes,
+  getQuizForTaking,
   getQuizzesCreatedByUser,
   getQuiz,
   createQuiz,
