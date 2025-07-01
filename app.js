@@ -22,6 +22,18 @@ const optionsRouter = require('./routes/options')
 
 app.use(express.static('public'))
 
+app.get('/multiply', (req, res) => {
+  const result = req.query.first * req.query.second
+
+  if (isNaN(result)) {
+    res.json({ result: 'NaN' })
+  } else if (result == null) {
+    res.json({ result: 'null' })
+  } else {
+    res.json({ result: result })
+  }
+})
+
 // error handler
 const notFoundMiddleware = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
@@ -51,10 +63,26 @@ app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 3000
 
-const start = async () => {
+const MONGO_URI =
+  process.env.NODE_ENV === 'test'
+    ? process.env.MONGO_URI_TEST
+    : process.env.MONGO_URI
+
+// const start = async () => {
+//   try {
+//     await connectDB(MONGO_URI)
+//     app.listen(port, () =>
+//       console.log(`Server is listening on port ${port}...`),
+//     )
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+const start = () => {
   try {
-    await connectDB(process.env.MONGO_URI)
-    app.listen(port, () =>
+    require('./db/connect')(MONGO_URI)
+    return app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`),
     )
   } catch (error) {
@@ -63,3 +91,5 @@ const start = async () => {
 }
 
 start()
+
+module.exports = { app }
