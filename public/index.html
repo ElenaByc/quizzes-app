@@ -667,6 +667,95 @@
         </form>
       </div>
 
+      <!-- Take Quiz Section -->
+      <div
+        id="take-quiz"
+        class="container d-none py-5 d-flex flex-column align-items-center gap-4"
+      >
+        <!-- Quiz Title -->
+        <h1 id="quiz-title"></h1>
+
+        <!-- Score Tracker -->
+        <div class="fs-5 fw-semibold text-center">
+          Current Score: <span id="current-score">0</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-100" style="max-width: 500px">
+          <div class="progress">
+            <div
+              id="quiz-progress"
+              class="progress-bar progress-bar-striped bg-success"
+              role="progressbar"
+              style="width: 0%"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <span id="progress-label" class="ms-2"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Block -->
+        <div id="quiz-question" class="card p-4 w-100" style="max-width: 600px">
+          <div class="mb-2 text-secondary fs-5 text-center">
+            Question <span id="question-number">1</span> of
+            <span id="total-questions">X</span>
+          </div>
+          <h2 id="question-text" class="text-center mb-4"></h2>
+
+          <form
+            id="quiz-form"
+            class="d-flex flex-column gap-3 align-items-center"
+          >
+            <div id="quiz-options" class="w-100 d-flex flex-column gap-2"></div>
+            <button
+              type="submit"
+              id="submit-answer"
+              class="btn btn-outline-secondary"
+            >
+              Submit Answer
+            </button>
+          </form>
+
+          <div
+            id="answer-feedback"
+            class="mt-4 fw-semibold fs-5 text-center"
+          ></div>
+
+          <button
+            id="next-question"
+            class="btn btn-outline-secondary mt-3 d-none"
+          >
+            Next Question
+          </button>
+        </div>
+
+        <!-- Final Results -->
+        <div
+          id="quiz-complete"
+          class="card p-5 d-none w-100 d-flex flex-column align-items-center gap-3"
+          style="max-width: 500px"
+        >
+          <h2 class="text-success">Quiz Complete!</h2>
+          <p class="fs-4">
+            You got <span id="final-score"></span> correct out of
+            <span id="final-total"></span>
+          </p>
+          <p class="fs-5">
+            Your Score: <span id="final-percent" class="fw-bold"></span>
+          </p>
+          <div class="d-flex gap-3 pt-3">
+            <button id="retake-quiz" class="btn btn-outline-secondary">
+              Retake Quiz
+            </button>
+            <button id="return-to-list" class="btn btn-outline-secondary">
+              Return to Quizzes
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Hidden input to store the quiz ID -->
       <input type="hidden" id="question-quiz-id" />
     </main>
