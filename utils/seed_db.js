@@ -36,7 +36,8 @@ factory.define('quiz', Quiz, {
       'Other',
     ]),
   isPublished: () => faker.datatype.boolean(),
-  createdBy: FactoryBot.assoc('user', '_id'),
+  // createdBy: FactoryBot.assoc('user', '_id'),
+  // got this error: Exception during run: TypeError: FactoryBot.assoc is not a function
 })
 
 // Seed function to set up a test user and test quizzes
