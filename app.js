@@ -14,6 +14,15 @@ const connectDB = require('./db/connect')
 
 const authenticateUser = require('./middleware/authentication')
 
+app.use((req, res, next) => {
+  if (req.path == '/multiply') {
+    res.set('Content-Type', 'application/json')
+  } else {
+    res.set('Content-Type', 'text/html')
+  }
+  next()
+})
+
 // routers
 const authRouter = require('./routes/auth')
 const quizzesRouter = require('./routes/quizzes')
@@ -81,7 +90,7 @@ const MONGO_URI =
 
 const start = () => {
   try {
-    require('./db/connect')(MONGO_URI)
+    connectDB(MONGO_URI)
     return app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`),
     )
